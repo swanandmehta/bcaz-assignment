@@ -26,4 +26,4 @@ hs_err_pid*
 frontend/src/main/ui/node_modules/*
 frontend/src/main/ui/node/*
 frontend/src/main/ui/dist/*
-frontend/**
+

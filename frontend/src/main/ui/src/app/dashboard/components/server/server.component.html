@@ -1,0 +1,36 @@
+<div class="row justify-content-center p-0 m-0">
+    <div class="col-6 p-0 m-0">
+        <form [formGroup]="serverForm" (submit)="onSubmit()">
+            <div class="mb-3">
+                <input type="input" class="form-control" formControlName="name" id="name" name="name" placeholder="Server Name">
+                <div *ngIf="controls.name.touched == true && controls.name.errors != null && controls.name.errors.required != null" class="text-danger">
+                    Mandatory Field. Please provide valid name for the server.
+                </div>
+            </div>
+            <div class="mb-3">
+                <input type="input" class="form-control" formControlName="hostname" id="hostname" name="hostname" placeholder="Host Name">
+                <div *ngIf="controls.hostname.touched == true && controls.hostname.errors != null && controls.hostname.errors.required != null" class="text-danger">
+                    Mandatory Field. Please provide valid hostname for the server.
+                </div>
+            </div>
+            <div class="mb-3">
+                <input type="input" class="form-control" formControlName="ip" id="ip" name="ip" placeholder="IP address">
+                <div *ngIf="controls.ip.touched == true && controls.ip.errors != null && controls.ip.errors.required != null" class="text-danger">
+                    Mandatory Field. Please provide valid IP for the server.
+                </div>
+            </div>
+            <div class="pb-3">
+                <input type="input" class="form-control" formControlName="weburl" id="weburl" name="weburl" placeholder="Web URL">
+                <div *ngIf="controls.weburl.touched == true && controls.weburl.errors != null && controls.weburl.errors.pattern != null" class="text-danger">
+                    Please provide valid URL.
+                </div>
+            </div>
+            <div class="d-flex flex-row-reverse" *ngIf="controls.id.value == null">
+                <button type="submit" [disabled]="serverForm.valid == false" class="btn btn-primary">Create</button>
+            </div>
+            <div class="d-flex flex-row-reverse" *ngIf="controls.id.value != null">
+                <button type="submit" [disabled]="serverForm.valid == false" class="btn btn-primary">Update</button>
+            </div>
+        </form>
+    </div>
+</div>

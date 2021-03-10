@@ -1,0 +1,39 @@
+<div class="col-12 p-0 pb-2 m-0 d-flex flex-row-reverse">
+    <button class="btn btn-primary" (click)="onAddNew()">Add new</button>
+</div>
+
+<table class="table">
+    <thead class="thead-light">
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Name</th>
+            <th scope="col">Host name</th>
+            <th scope="col">IP address</th>
+            <th scope="col">Web Url</th>
+            <th scope="col">Action</th>
+        </tr>
+    </thead>
+    <tbody *ngFor="let server of serverList; let rowId = index">
+        <tr>
+            <th scope="row">{{rowId + 1}}</th>
+            <td><a routerLink="{{'/dashboard/' + server.id}}">{{server.name}}</a></td>
+            <td>{{server.hostname}}</td>
+            <td>{{server.ip}}</td>
+            <td>
+                <p class="text-truncate">
+                    <a href="{{server.weburl}}">{{server.weburl | tableText}}</a>
+                </p>
+            </td>
+            <td>
+                <div class="justify-content-center">
+                    <button class="btn btn-danger btn-sm mx-2" (click)="onDelete(server)">
+                        <fa-icon size="xs" [icon]="deleteIcon"></fa-icon>
+                    </button>
+                    <button [disabled]="server.weburl == undefined" class="btn btn-primary btn-sm mx-2" (click)="getTitle(server)">
+                        <fa-icon size="xs" [icon]="checkIcon"></fa-icon>
+                    </button>
+                </div>
+            </td>
+        </tr>
+    </tbody>
+</table>
