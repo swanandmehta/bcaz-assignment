@@ -6,11 +6,13 @@ import com.bcas.app.exception.InvalidServerIdException;
 import com.bcas.app.exception.InvalidWeburlException;
 import com.bcas.app.repository.IServerRepository;
 import com.bcas.app.service.IServerService;
+import org.apache.http.Header;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
+import org.apache.http.util.EntityUtils;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,8 +20,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.io.IOException;
 import java.util.List;
 import java.util.Scanner;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 @Service
 @Primary
@@ -70,20 +70,12 @@ public class ServerService implements IServerService {
         Server server = this.findById(id);
         CloseableHttpClient httpclient = null;
         try {
-            Pattern titlePatten = Pattern.compile("(?<=<title>)(.)*(?=<\\/title>)");
             httpclient = HttpClients.createDefault();
             HttpGet httpget = new HttpGet(server.getWeburl());
             HttpResponse httpresponse = httpclient.execute(httpget);
-            Scanner sc = new Scanner(httpresponse.getEntity().getContent());
-            StringBuilder sb = new StringBuilder();
-            while (sc.hasNext()) {
-                sb.append(sc.next());
-            }
+            String content = EntityUtils.toString(httpresponse.getEntity());
             WeburlDetailsDto dto = new WeburlDetailsDto();
-            Matcher matcher = titlePatten.matcher(sb.toString());
-            while(matcher.find()){
-                dto.setTitle(matcher.group(0));
-            }
+            dto.setTitle(content.substring(content.indexOf("<title>") + 7, content.indexOf("</title>")));
             return dto;
         } catch (ClientProtocolException e) {
             throw new InvalidWeburlException("Could not send the request to server", 103);
